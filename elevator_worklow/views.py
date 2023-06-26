@@ -3,9 +3,14 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import ElevatorSystem, Elevator, Floor, Request
+from .models import ElevatorSystem, Elevator, Floor
 from .serializers import ElevatorSystemSerializer, ElevatorSerializer, FloorSerializer, RequestSerializer
 from .utils import assign_optmimal_elevator
+
+
+class ElevatorSystemViewSet(viewsets.ModelViewSet):
+    queryset = ElevatorSystem.objects.all()
+    serializer_class = ElevatorSystemSerializer
 
 class ElevatorViewSet(viewsets.ModelViewSet):
     queryset = Elevator.objects.all()

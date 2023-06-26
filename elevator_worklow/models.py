@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 from core.models import BaseModel
 from elevator_worklow.elevator_enum import DirectionStatusEum, DoorStatusEnum 
 
@@ -59,3 +59,12 @@ class Request(BaseModel):
     def __str__(self):
         return f"Request #{self.id}"
     
+class ReviewRequestElevator(BaseModel):
+    """
+    Review Based optimal
+    """
+
+    elevator = models.ForeignKey(Elevator, on_delete=models.CASCADE, related_name='elevator_review')
+    request = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='request_review')
+    rating = models.IntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(0)])
+    comment = models.TextField(blank=True)
