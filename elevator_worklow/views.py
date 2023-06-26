@@ -2,9 +2,10 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
-
-from .models import ElevatorSystem, Elevator, Floor
-from .serializers import ElevatorSystemSerializer, ElevatorSerializer, FloorSerializer, RequestSerializer
+from rest_framework import mixins
+from rest_framework import generics
+from .models import ElevatorSystem, Elevator, Floor, ReviewRequestElevator, Request
+from .serializers import ElevatorSystemSerializer, ElevatorSerializer, ReviewElevatorRequestedSerializer, RequestSerializer
 from .utils import assign_optmimal_elevator
 
 
@@ -118,3 +119,23 @@ class ElevatorViewSet(viewsets.ModelViewSet):
         elevator.door_status = 'CLOSED'
         elevator.save()
         return Response({'message': 'Door closed'})
+
+class RequestElevatorViewMixin(
+    mixins.UpdateModelMixin, 
+    mixins.RetrieveModelMixin, 
+    mixins.CreateModelMixin, 
+    mixins.DestroyModelMixin, 
+    mixins.ListModelMixin,
+    generics.GenericAPIView
+):
+    
+    queryset = Request.objects.all()
+    serializer_class = RequestSerializer
+
+class ReviewElevatorViewSet(viewsets.ModelViewSet):
+    """
+    Review Correpondent View Set
+    """
+
+    queryset = ReviewRequestElevator.objects.all()
+    serializer_class = ReviewElevatorRequestedSerializer
