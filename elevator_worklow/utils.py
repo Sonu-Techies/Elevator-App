@@ -1,7 +1,11 @@
 from elevator_worklow.models import Elevator, Request
 
 def assign_optmimal_elevator(requested_floor):
-    available_elevators = Elevator.objects.filter(is_operational=True, is_in_maintenance=False)
+    """
+    Assign optimal Elevator correspondent Request
+    """
+
+    available_elevators = Elevator.objects.filter(is_operational=True, elevator_system__maintenance_mode=False)
     optimal_elevator = None
     optimal_distance = float('inf')
 
