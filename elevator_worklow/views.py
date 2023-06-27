@@ -3,9 +3,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import mixins
-from rest_framework import generics
 from .models import ElevatorSystem, Elevator, Floor, ReviewRequestElevator, Request
-from .serializers import ElevatorSystemSerializer, ElevatorSerializer, ReviewElevatorRequestedSerializer, RequestSerializer
+from .serializers import (
+    ElevatorSystemSerializer, ElevatorSerializer,
+    ReviewElevatorRequestedSerializer, RequestSerializer, FloorSerializer
+)
 from .utils import assign_optmimal_elevator
 
 
@@ -32,6 +34,7 @@ class ElevatorViewSet(viewsets.ModelViewSet):
             floors = elevated_detail.get('floors', [])
             for floor_number in floors:
                 Floor.objects.create(floor_number=floor_number, elevator=elevator)
+
         return Response({'message': f'Successfully initialized {num_elevators} elevators'})
 
     @action(detail=True, methods=['get'])
@@ -41,7 +44,7 @@ class ElevatorViewSet(viewsets.ModelViewSet):
         """
 
         elevator = self.get_object()
-        requests = elevator.requests.all()
+        requests = elevator.elevator_request.all()
         serializer = RequestSerializer(requests, many=True)
         return Response(serializer.data)
 
@@ -52,7 +55,7 @@ class ElevatorViewSet(viewsets.ModelViewSet):
         """
 
         elevator = self.get_object()
-        floors = elevator.floors.all().order_by('floor_number')
+        floors = elevator.elevator.all().order_by('floor_number')
         next_floor = None
         for floor in floors:
             if floor.floor_number > elevator.current_floor:
@@ -120,13 +123,18 @@ class ElevatorViewSet(viewsets.ModelViewSet):
         elevator.save()
         return Response({'message': 'Door closed'})
 
+
+class FloorViewSet(viewsets.ModelViewSet):
+    queryset = Floor.objects.all()
+    serializer_class = FloorSerializer
+
 class RequestElevatorViewMixin(
     mixins.UpdateModelMixin, 
     mixins.RetrieveModelMixin, 
     mixins.CreateModelMixin, 
     mixins.DestroyModelMixin, 
     mixins.ListModelMixin,
-    generics.GenericAPIView
+    viewsets.GenericViewSet
 ):
     
     queryset = Request.objects.all()

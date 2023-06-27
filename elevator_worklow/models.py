@@ -13,6 +13,9 @@ class ElevatorSystem(BaseModel):
         help_text="Indicate whether the elevator is maintaince mode or not"
     )
 
+    def __str__(self) -> str:
+        return f"{self.total_elevators}"
+
 
 class Elevator(BaseModel):
     """
