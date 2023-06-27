@@ -10,9 +10,7 @@ This is a Django-based elevator system that allows the management of elevators i
 - [API Contracts](#api-contracts)
 - [Setup and Deployment](#setup-and-deployment)
 - [Testing](#testing)
-- [Dependencies](#dependencies)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Architecture
 
@@ -47,24 +45,12 @@ The API contracts include the following endpoints:
 - `POST /api/elevator/{id}/mark_maintenance`: Marks a given elevator as not working or in maintenance.
 - `POST /api/elevator/{id}/open_door`: Opens the door of a given elevator.
 - `POST /api/elevator/{id}/close_door`: Closes the door of a given elevator.
+- `GET & POST /api/elevator-system/`:  Give the detail of elevator system.
+- `GET & POST /api/elevator/`:  Give the list and detail of indivisual elevator system.
+- `GET & POST /api/review/`:  User Feedback/ Review from particualar request with elevator.
+- `GET & POST /api/request/`:  Give the detail of correspondent Request.
+- `GET & POST /api/floor/`:  Give the detail of assosiated floor.
 
-
-## Database Modeling
-
-The database modeling includes three main models: `ElevatorSystem`, `Elevator`, `Floor`, and `Request`. The `ElevatorSystem` model represents the overall elevator system, `Elevator` represents the details of individual elevators, `Floor` represents the floors in the building, and `Request` represents the user requests for an elevator.
-
-## API Contracts
-
-The API contracts include the following endpoints:
-
-- `POST /api/elevator/initialize_system`: Initializes the elevator system with 'n' elevators.
-- `GET /api/elevator/{id}/requests`: Fetches all requests for a given elevator.
-- `GET /api/elevator/{id}/next_destination`: Fetches the next destination floor for a given elevator.
-- `GET /api/elevator/{id}/moving_direction`: Fetches the current moving direction of a given elevator.
-- `POST /api/elevator/{id}/add_request`: Adds a user request for a given elevator.
-- `POST /api/elevator/{id}/mark_maintenance`: Marks a given elevator as not working or in maintenance.
-- `POST /api/elevator/{id}/open_door`: Opens the door of a given elevator.
-- `POST /api/elevator/{id}/close_door`: Closes the door of a given elevator.
 
 ## Setup and Deployment
 
@@ -73,7 +59,7 @@ To set up and deploy the elevator system, follow these steps:
 1. Clone the repository:
 2. Install the dependencies using pip:
 
-    $ pip install -r requirements/dev.txt
+    $ pip install -r requirements.txt
     
 3. Set up the database (e.g., PostgreSQL or MySQL) and update the database configuration in `settings.py`.
 4. Run the database migrations:
@@ -82,7 +68,7 @@ To set up and deploy the elevator system, follow these steps:
 
 5. Start the development server
 
-6. Access the APIs at `http://localhost:8000/api/elevator/`.
+6. Access the APIs at `http://localhost:8000/api/`.
 
 ## Testing
 
