@@ -16,11 +16,19 @@ class ElevatorSystemViewSet(viewsets.ModelViewSet):
     serializer_class = ElevatorSystemSerializer
 
 class ElevatorViewSet(viewsets.ModelViewSet):
+    """
+    Elevator ViewSet
+    """
+
     queryset = Elevator.objects.all()
     serializer_class = ElevatorSerializer
 
     @action(detail=False, methods=['post'])
     def initialize_system(self, request):
+        """
+        initialize Elevator System
+        """
+
         num_elevators = request.data.get('num_elevators')
         elevator_system_details = request.data.get('elevator_details', [])
         elevator_system = ElevatorSystem.objects.create(total_elevators=num_elevators)
@@ -72,7 +80,7 @@ class ElevatorViewSet(viewsets.ModelViewSet):
         """
 
         elevator = self.get_object()
-        floors = elevator.floors.all().order_by('floor_number')
+        floors = elevator.elevator.all().order_by('floor_number')
         if floors:
             if elevator.current_floor < floors[0].floor_number:
                 direction = 'up'
@@ -89,6 +97,7 @@ class ElevatorViewSet(viewsets.ModelViewSet):
         """
         Add Request correspondent floor
         """
+    
         elevator = self.get_object()
         floor_number = request.data.get('floor_number')
         try:
@@ -100,6 +109,10 @@ class ElevatorViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def mark_maintenance(self, request, pk=None):
+        """
+        API mark for maintance
+        """
+
         elevator = self.get_object()
         elevator.is_operational = False
         elevator.save()
